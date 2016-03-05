@@ -10,6 +10,7 @@ namespace MVC5Course.Controllers
     {
         public ActionResult Index()
         {
+            throw new Exception("Error Test");
             return View();
         }
 
