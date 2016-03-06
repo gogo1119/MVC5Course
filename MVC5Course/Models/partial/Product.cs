@@ -14,5 +14,11 @@ namespace MVC5Course.Models
                 return string.Format("{0:C}", Price);
             }
         }
+
+        public int OrderCount
+        {
+            get;
+            set;
+        }
     }
 }
