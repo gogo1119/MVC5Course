@@ -10,7 +10,6 @@ namespace MVC5Course.Controllers
     {
         public ActionResult Index()
         {
-            throw new Exception("Error Test");
             return View();
         }
 
@@ -25,6 +24,11 @@ namespace MVC5Course.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        public ActionResult Test()
+        {
             return View();
         }
     }
