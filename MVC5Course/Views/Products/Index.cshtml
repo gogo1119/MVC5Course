@@ -4,18 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-@section breadcrumb{
-    <li>
-        @Html.ActionLink("產品清單", "Index", "Products")
-    </li>
-}
 
 <h2>產品清單</h2>
 
 <p>
     @Html.ActionLink("建立新產品", "Create")
+    @Html.ActionLink(" ", "Create", null, new { @class= "btn btn-primary", title="這是測試" })
+    <a href="@Url.Action("Create")" class="btn btn-primary" title="這是測試"></a>
+
     @if (TempData["EditDoneMessage"] != null &&
-                                                                        !string.IsNullOrWhiteSpace(TempData["EditDoneMessage"].ToString()))
+                            !string.IsNullOrWhiteSpace(TempData["EditDoneMessage"].ToString()))
     {
         <script>alert('@TempData["EditDoneMessage"].ToString()');</script>
     }
