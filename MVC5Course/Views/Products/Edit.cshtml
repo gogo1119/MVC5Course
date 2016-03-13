@@ -3,14 +3,22 @@
 @{
     ViewBag.Title = "Edit";
 }
-
+@section breadcrumb{
+    <li>
+        @Html.ActionLink("產品清單", "Index", "Products")
+        <i class="icon-angle-right"></i>
+    </li>
+    <li>
+        編輯
+    </li>
+}
 <h2>Edit</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Product</h4>
         <hr />
