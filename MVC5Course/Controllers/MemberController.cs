@@ -24,7 +24,7 @@ namespace MVC5Course.Controllers
         {
             if (ChekcLogin(login.Email, login.Password))
             {
-                FormsAuthentication.RedirectFromLoginPage(login.Email, false);
+                FormsAuthentication.RedirectFromLoginPage(login.Email, login.RememberMe);
 
                 return RedirectToAction("Index", "Home");
             }
