@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AR Controller Index</h2>
+
+<button onclick="GetData();">取得資料</button>
+<span id="TableView"></span>
+
+@section Scripts{
+  
+
+<script type="text/javascript">
+    function GetData() {
+        /// <summary>
+        /// 取得後端資料
+        /// </summary>
+        /// <returns></returns>
+        $.getJSON('/AR/JsonTest', '', function (data) {
+            var s = '';
+            for (var i = 0; i < data.length; i++) {
+                s += '<tr><td>' + data[i].ProductId + '</td><td>' + data[i].ProductName + '</td></tr>';
+            }
+            s = '<table border="1">' + s + '</table>';
+            $('#TableView').html(s);
+
+            console.log(data);
+            /*
+
+            Active: false
+    IsDelete: false
+    OrderCount: 0
+    OrderLine: Array[0]
+    Price: 5.5
+    PriceFormat: "NT$5.50"
+    ProductId: 1
+    ProductName: "White fleece fabric"
+    Stock: 1210.2
+            */
+        })
+    }
+
+</script>
+
+}

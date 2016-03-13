@@ -14,12 +14,12 @@ namespace MVC5Course.Controllers
     {
         //private FabricsEntities db = new FabricsEntities();
 
-        private ProductRepository Repo = RepositoryHelper.GetProductRepository();
+        //private ProductRepository Repo = RepositoryHelper.GetProductRepository();
 
         // GET: Products
         public ActionResult Index()
         {
-            var data = Repo.All();
+            var data = Repo.All().Take(5);
 
             //傳統寫法
             //var data2 = db.Product.Where(p => p.IsDelete);
@@ -28,7 +28,31 @@ namespace MVC5Course.Controllers
             //把第一個宣告的Respository內的UnitIfWork帶入建構式的參數，可以讓兩個Repository共通
             var RepoOL = RepositoryHelper.GetOrderLineRepository(Repo.UnitOfWork);
 
+
             return View(data);
+        }
+
+        [HttpPost]
+        public ActionResult Index(IList<ProductsSaveViewModel> data)
+        {
+            return View(Repo.All().Take(5));
+            if (ModelState.IsValid)
+            {
+                foreach (var item in data)
+                {
+                    var product = Repo.Find(item.ProductId);
+                    product.Stock = item.Stock;
+                    product.Price = item.Price;
+                }
+
+                Repo.UnitOfWork.Commit();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(Repo.All().Take(5));
+            }
         }
 
         // GET: Products/Details/5
@@ -101,13 +125,35 @@ namespace MVC5Course.Controllers
         {
             if (ModelState.IsValid)
             {
-                var db = Repo.UnitOfWork.Context;
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                Product p = Repo.Find(product.ProductId);
+                Repo.UnitOfWork.Commit();
+
+                //var db = Repo.UnitOfWork.Context;
+                //db.Entry(product).State = EntityState.Modified;
+                //db.SaveChanges();
+
+                TempData["EditDoneMessage"] = "新增成功!";
                 return RedirectToAction("Index");
             }
             return View(product);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, FormCollection Form)
+        //{
+        //    Product p = Repo.Find(id);
+
+        //    if (TryUpdateModel<Product>(p, new string[] { "ProductId", "ProductName", "Price", "Active", "Stock" }))
+        //    {
+        //        Repo.UnitOfWork.Commit();
+
+        //        TempData["EditDoneMessage"] = "修改成功!";
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View(p);
+        //}
 
         // GET: Products/Delete/5
         public ActionResult Delete(int? id)
