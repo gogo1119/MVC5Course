@@ -32,5 +32,27 @@ namespace MVC5Course.Controllers
         {
             return View();
         }
+
+        [HandleError(ExceptionType = typeof(ArgumentException), View = "ErrorArgument")]
+        public ActionResult ErrorTest(string e)
+        {
+            if (e == "1")
+            {
+                throw new Exception("Error 1");
+            }
+
+            if (e == "2")
+            {
+                throw new ArgumentException("Error 2");
+            }
+
+            return Content("No Error");
+        }
+
+        public ActionResult RazorTest()
+        {
+            int[] data = new int[] { 1, 2, 3, 4, 5 };
+            return PartialView(data);
+        }
     }
 }
