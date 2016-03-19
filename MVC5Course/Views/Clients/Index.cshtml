@@ -1,0 +1,96 @@
+﻿@using PagedList
+@using PagedList.Mvc
+
+@model IEnumerable<MVC5Course.Models.Client>
+
+@{
+    if (IsAjax)
+    {
+        Layout = "";
+    }
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Ajax.ActionLink("Create New", "Create", new AjaxOptions { UpdateTargetId = "AjaxZone" })
+</p>
+
+@{
+    var data = Model as IPagedList;
+    if (data != null)
+    {
+        @Html.PagedListPager(data, generatePageUrl: page => Url.Action("Index", new { PageNum = page }), options:PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("#main"));
+    }
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditRating)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Occupation.OccupationName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreditRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Occupation.OccupationName)
+            </td>
+            <td>
+                @Ajax.ActionLink("Edit", "Edit", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" }) |
+                @Ajax.ActionLink("Details", "Details", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" }) |
+                @Ajax.ActionLink("Delete", "Delete", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+
+
+
+
+<div id="AjaxZone"></div>
