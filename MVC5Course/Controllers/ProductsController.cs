@@ -17,9 +17,25 @@ namespace MVC5Course.Controllers
         //private ProductRepository Repo = RepositoryHelper.GetProductRepository();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(bool? IsActive, string Keyword)
         {
-            var data = Repo.All().Take(5);
+            var data = Repo.All().Take(10);
+
+            if (IsActive.HasValue)
+            {
+                data = data.Where(p => p.Active == IsActive.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(Keyword))
+            {
+                data = data.Where(p => p.ProductName.Contains(Keyword));
+            }
+
+            var items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = "有效", Value = "true" });
+            items.Add(new SelectListItem { Text = "無效", Value = "false" });
+            //ViewData的指定名稱要同等View上的下拉選單名稱，才能自行建構下拉選單
+            //Get的參數上使用相同名稱時，就可以讓下拉選單自動預設參數
+            ViewData["IsActive"] = new SelectList(items, "Value", "Text");
 
             //傳統寫法
             //var data2 = db.Product.Where(p => p.IsDelete);
@@ -36,6 +52,7 @@ namespace MVC5Course.Controllers
         public ActionResult Index(IList<ProductsSaveViewModel> data)
         {
             return View(Repo.All().Take(5));
+
             if (ModelState.IsValid)
             {
                 foreach (var item in data)
@@ -194,6 +211,14 @@ namespace MVC5Course.Controllers
                 //db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ShowOrderLine(int Id)
+        {
+            TempData["ProductId"] = Id;
+
+            var data = Repo.All().Take(5);
+            return RedirectToAction("Index");
         }
     }
 }

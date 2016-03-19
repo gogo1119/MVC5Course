@@ -13,7 +13,12 @@ namespace MVC5Course.Models
 
         public override IQueryable<Product> All()
         {
-            return base.All().Where(p => p.IsDelete == false);
+            return All(false);
+        }
+
+        public IQueryable<Product> All(bool IsDelete)
+        {
+            return base.All().Where(p => p.IsDelete == IsDelete);
         }
     }
 

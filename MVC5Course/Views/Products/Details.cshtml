@@ -41,9 +41,11 @@
         <dd>
             @Html.DisplayFor(model => model.Stock)
         </dd>
-
     </dl>
 </div>
+
+@*@Html.Action("OrderLineById", "OrderLines", new { id = Model.ProductId })*@
+@Html.Partial("../OrderLines/OrderLineById", Model.OrderLine)
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }) |
     @Html.ActionLink("Back to List", "Index")
