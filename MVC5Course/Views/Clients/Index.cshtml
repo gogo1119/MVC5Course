@@ -11,19 +11,40 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>客戶管理</h2>
 
 <p>
     @Ajax.ActionLink("Create New", "Create", new AjaxOptions { UpdateTargetId = "AjaxZone" })
 </p>
 
+@using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "AjaxZone" }))
+{
+    @Html.TextBox("FirstName", null, new { @class = "form-control" })
+    <button type="submit">查詢</button>
+}
+
 @{
     var data = Model as IPagedList;
     if (data != null)
     {
-        @Html.PagedListPager(data, generatePageUrl: page => Url.Action("Index", new { PageNum = page }), options:PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("#main"));
+        @Html.PagedListPager(data, generatePageUrl: page => Url.Action("Index", new { PageNum = page }), options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("#main"));
     }
 }
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        @if (TempData["Success"] != null)
+        {
+            <text>
+        alert('@Ajax.JavaScriptStringEncode(TempData["Success"].ToString())');
+
+        </text>
+        }
+    </script>
+}
+
 
 <table class="table">
     <tr>
@@ -77,7 +98,10 @@
                 @Html.DisplayFor(modelItem => item.Occupation.OccupationName)
             </td>
             <td>
-                @Ajax.ActionLink("Edit", "Edit", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" }) |
+                @Ajax.ActionLink("Edit", "Edit", new
+           {
+               id = item.ClientId
+           }, new AjaxOptions { UpdateTargetId = "AjaxZone" }) |
                 @Ajax.ActionLink("Details", "Details", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" }) |
                 @Ajax.ActionLink("Delete", "Delete", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "AjaxZone" })
             </td>

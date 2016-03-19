@@ -17,16 +17,16 @@ namespace MVC5Course.Controllers
         private FabricsEntities db = new FabricsEntities();
 
         // GET: Clients
-        public ActionResult Index(int? PageNum)
+        public ActionResult Index(string FirstName, int PageNum = 1)
         {
             var client = db.Client.Include(c => c.Occupation).OrderBy(c => c.ClientId).AsEnumerable();
 
-            int PageIndex = 1;
-            if (PageNum.HasValue)
+            if(!string.IsNullOrWhiteSpace(FirstName))
             {
-                PageIndex = PageNum.Value;
+                client = client.Where(c => c.FirstName.Contains(FirstName));
             }
-            client = client.ToPagedList(PageIndex, 10);
+
+            client = client.ToPagedList(PageNum, 10);
 
             return View(client);
         }
@@ -99,8 +99,10 @@ namespace MVC5Course.Controllers
                 db.Entry(client).State = EntityState.Modified;
                 db.SaveChanges();
 
-                return View("Index", db.Client.Include(c => c.Occupation).Take(5));
-                //return RedirectToAction("Index");
+                //return View("Index", db.Client.Include(c => c.Occupation).Take(5));
+
+                TempData["Success"] = "更新成功\n您剛剛更新的資料編號為:" + client.ClientId;
+                return RedirectToAction("Index");
             }
             ViewBag.OccupationId = new SelectList(db.Occupation, "OccupationId", "OccupationName", client.OccupationId);
             return View(client);
